@@ -3,6 +3,7 @@ archivo = File.open('../../texto_prueba.txt', 'r')
 texto_sucio = archivo.read
 archivo.close
 
+start_time = Time.now
 # Se limpian los signos de puntuación para hacer el conteo de palabras
 # mediante una expresión regular
 texto_limpio = texto_sucio.gsub(/[[:punct:]]/, '').downcase
@@ -21,6 +22,11 @@ end
 
 # Ordenamos el diccionario por la cantidad de veces que aparece cada palabra
 conteo_palabras_sort = conteo_palabras.sort_by { |palabra, conteo| - conteo }
+
+end_time = Time.now
+
+execution_time = end_time - start_time
+puts "Tiempo de ejecución: #{execution_time} segundos"
 
 # Imprimir el resultado
 # Los primeros 10

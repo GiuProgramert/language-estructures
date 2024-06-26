@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -64,6 +68,7 @@ public class Main {
 
         int[][] resultado = new int[filaMatriz1][columnaMatriz2];
 
+        long startTime = System.nanoTime();
         for (int i = 0; i < filaMatriz1; i++) {
             for (int j = 0; j < columnaMatriz2; j++) {
                 resultado[i][j] = 0;
@@ -73,9 +78,30 @@ public class Main {
                 }
             }
         }
+        long endTime = System.nanoTime();
+        System.out.println((endTime - startTime) / 1000000.0);
 
         System.out.println("Resultado");
         printMatriz(resultado);
+        try {
+            FileWriter fw = new FileWriter("resultado.txt");
+            BufferedWriter archivoResultado = new BufferedWriter(fw);
+
+            for (int i = 0; i < resultado.length; i++) {
+                for (int j = 0; j < resultado[i].length; j++) {
+                    if (j == columnaMatriz2 - 1) {
+                        archivoResultado.write(Integer.toString(resultado[i][j]));
+                    } else {
+                        archivoResultado.write((Integer.toString(resultado[i][j]) + ","));
+                    }
+                }
+                archivoResultado.newLine();
+            }
+            archivoResultado.close();
+        } catch (IOException e) {
+            System.err.println("Error al abrir el archivo: " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 }

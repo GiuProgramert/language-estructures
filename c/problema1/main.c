@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <ctype.h>
-#define MAX 1000
+#define MAX 3000
 
 struct PalabrasFrecuencia
 {
@@ -26,8 +27,9 @@ void contar_palabras(const char *str)
 	struct PalabrasFrecuencia palabras[MAX] = {{"", 0}};
 
 	// Se realiza una copia del string para no modificar el original
-	char copia_str[4000];
-	strcpy(copia_str, str);
+	char copia_str[6000];
+	strncpy(copia_str, str, sizeof(copia_str) - 1);
+	copia_str[sizeof(copia_str) - 1] = '\0';
 
 	char *token = strtok(copia_str, " ");
 
@@ -89,46 +91,60 @@ void limpiarTexto(char *textoSucio, char *textoLimpio)
 
 int main()
 {
-	FILE *archivo;
-	char *textoSucio;
-	char *textoLimpio;
+    FILE *archivo;
+    char *textoSucio;
+    char *textoLimpio;
 
-	// Es necesario saber el tamaño del texto para poder leerlo
-	long tamanoTexto = 4000;
+    // Abrir archivo
+    archivo = fopen("../../texto_prueba.txt", "r");
+    if (archivo == NULL)
+    {
+        perror("Error al abrir el archivo");
+        return 1;
+    }
 
-	// Lectura del archivo
-	archivo = fopen("../../texto_prueba.txt", "r");
-	if (archivo == NULL)
-	{
-		perror("Error al abrir el archivo");
-		return 1;
-	}
+    // Determinar el tamaño del archivo
+    fseek(archivo, 0, SEEK_END);
+    long tamanoTexto = ftell(archivo);
+    rewind(archivo);
 
-	textoSucio = (char *)malloc(tamanoTexto * sizeof(char));
+    // Asignar memoria
+    textoSucio = (char *)malloc((tamanoTexto + 1) * sizeof(char));
+    if (textoSucio == NULL)
+    {
+        perror("No se pudo asignar memoria");
+        fclose(archivo);
+        return 1;
+    }
 
-	if (textoSucio == NULL)
-	{
-		perror("No se pudo asignar memoria");
-		fclose(archivo);
-		return 1;
-	}
+    textoLimpio = (char *)malloc((tamanoTexto + 1) * sizeof(char));
+    if (textoLimpio == NULL)
+    {
+        perror("No se pudo asignar memoria");
+        fclose(archivo);
+        free(textoSucio);
+        return 1;
+    }
 
-	textoLimpio = (char *)malloc(tamanoTexto * sizeof(char));
-	if (textoLimpio == NULL)
-	{
-		perror("No se pudo asignar memoria");
-		fclose(archivo);
-		free(textoSucio);
-		return 1;
-	}
+    // Leer archivo
+    fread(textoSucio, 1, tamanoTexto, archivo);
+    fclose(archivo);
+    textoSucio[tamanoTexto] = '\0'; // Asegurar que la cadena está terminada en null
 
-	fscanf(archivo, "%[^\n]s", textoSucio);
-	fclose(archivo);
+	clock_t start_time = clock();
+    // Limpiar texto
+    limpiarTexto(textoSucio, textoLimpio);
 
-	// Limpieza del texto sacando los signos y convirtiendo a minúsculas
-	limpiarTexto(textoSucio, textoLimpio);
+    // Contar palabras
+    contar_palabras(textoLimpio);
 
-	contar_palabras(textoLimpio);
+	clock_t end_time = clock();
+	double execution_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecución: %f segundos\n", execution_time);
 
-	return 0;
+    // Liberar memoria
+    free(textoSucio);
+    free(textoLimpio);
+
+    return 0;
 }

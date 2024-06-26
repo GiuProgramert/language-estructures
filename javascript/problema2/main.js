@@ -1,4 +1,5 @@
 import readline from "readline";
+import fs from "node:fs";
 
 // Como estamos usando node.js para correr el entorno de javascript
 // Es necesario que usemos el módulo readline para poder leer la entrada
@@ -72,6 +73,7 @@ printMatriz(matriz1);
 console.log("Matriz 2");
 printMatriz(matriz2);
 
+console.time("tiempo");
 // Multiplicación de matrices
 const resultado = [];
 for (let i = 0; i < filaMatriz1; i++) {
@@ -90,5 +92,15 @@ for (let i = 0; i < filaMatriz1; i++) {
   resultado.push(fila);
 }
 
+console.timeEnd("tiempo");
+
 console.log("resultado");
 printMatriz(resultado);
+
+const resultadoContenido = resultado.map(fila => fila.join(",")).join("\n");
+// Escribir el resultado en un archivo
+fs.writeFileSync("../resultado.txt", resultadoContenido, err => {
+  if (err) {
+    console.error(err)
+  }
+});

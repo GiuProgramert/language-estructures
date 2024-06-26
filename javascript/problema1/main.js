@@ -3,6 +3,7 @@ import fs from "node:fs";
 // Lectura del archivo
 const textoSucio = fs.readFileSync("../texto_prueba.txt", "utf8");
 
+console.time("tiempo");
 // Se limpian los signos de puntuación para hacer el conteo de palabras
 // mediante una expresión regular
 const textoLimpio = textoSucio
@@ -25,6 +26,7 @@ textoLimpio.split(" ").forEach((palabra) => {
 const conteoPalabrasSort = Object.entries(conteoPalabras).sort(
   ([, a], [, b]) => b - a
 );
+console.timeEnd("tiempo");
 
 // Imprimir el resultado
 for (let i = 0; i < 10; i++) {

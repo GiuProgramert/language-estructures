@@ -27,6 +27,8 @@ void generar_matriz(int fila, int columna, int matriz[][columna])
 
 int main()
 {
+    FILE *archivoResultado;
+
     // Inicialización de la semilla para números aleatorios
     srand(time(NULL));
 
@@ -75,6 +77,8 @@ int main()
 
     int resultado[fila_matriz1][columna_matriz2];
 
+	clock_t start_time = clock();
+
     for (int i = 0; i < fila_matriz1; i++)
     {
         for (int j = 0; j < columna_matriz2; j++)
@@ -87,6 +91,33 @@ int main()
         }
     }
 
+	clock_t end_time = clock();
+    double execution_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecución: %f segundos\n", execution_time);
+
     printf("Resultado\n");
     print_matriz(fila_matriz1, columna_matriz2, resultado);
+
+    archivoResultado = fopen("../../resultado.txt", "w");
+    if (archivoResultado == NULL)
+    {
+        perror("Error al abrir el archivo");
+        return 1;
+    }
+
+    for (int i = 0; i < fila_matriz1; i++)
+    {
+        for (int j = 0; j < columna_matriz2; j++)
+        {
+            if (j == columna_matriz2 - 1)
+            {
+                fprintf(archivoResultado, "%d", resultado[i][j]);
+            }
+            else
+            {
+                fprintf(archivoResultado, "%d,", resultado[i][j]);
+            }
+        }
+        fprintf(archivoResultado, "\n");
+    }
 }

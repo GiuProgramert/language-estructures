@@ -59,6 +59,8 @@ print_matriz(matriz1)
 puts "Matriz 2:"
 print_matriz(matriz2)
 
+start_time = Time.now
+
 resultado = []
 for i in 0..fila_matriz1-1
     fila = []
@@ -75,5 +77,15 @@ for i in 0..fila_matriz1-1
     resultado.push(fila)
 end
 
+end_time = Time.now
+
+execution_time = end_time - start_time
+puts "Tiempo de ejecución: #{execution_time} segundos"
+
 puts "resultado"
 print_matriz(resultado)
+
+archivoResultado = File.open('../../resultado.txt', 'w')
+archivoResultado.write(
+    resultado.map { |fila| fila.join(',') }.join("\n")
+)

@@ -1,10 +1,12 @@
 import string
+import time
 
 # Lectura del archivo
 archivo = open("texto_prueba.txt", "r")
 texto_sucio = archivo.read()
 archivo.close()
 
+start_time = time.time()
 # string.punctuation contiene todos los signos de puntuación
 texto_limpio = ''.join([c for c in texto_sucio if c not in string.punctuation]).lower()
 
@@ -22,6 +24,9 @@ for palabra in texto_limpio.split(" "):
 conteo_palabras_sort = list(
     sorted(conteo_palabras.items(), key=lambda item: item[1], reverse=True)
 )
+end_time = time.time()
+
+print(f"Tiempo de ejecución: {end_time - start_time} segundos")
 
 # Imprimir el resultado
 print("Conteo de palabras")

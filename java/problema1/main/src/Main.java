@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         String textoSucio;
         String textoLimpio;
-        Map<String, Integer> conteoPalabras = new HashMap<String, Integer>();
+        Map<String, Integer> conteoPalabras = new HashMap<>();
         List<Map.Entry<String, Integer>> conteoPalabrasSort;
 
         try {
@@ -17,6 +17,7 @@ public class Main {
 
             textoSucio = archivo.readLine();
 
+            long startTime = System.nanoTime();
             // Se limpian los signos de puntuación para hacer el conteo de palabras
             // mediante una expresión regular
             textoLimpio = textoSucio
@@ -40,6 +41,9 @@ public class Main {
             // Ordenamos el diccionario por la cantidad de veces que aparece cada palabra
             Collections.sort(conteoPalabrasSort, (entrada1, entrada2) -> entrada2.getValue().compareTo(entrada1.getValue()));
 
+            long endTime = System.nanoTime();
+
+            System.out.println((endTime - startTime) / 1_000_000.0);
             // Imprimir el resultado
             for (int i = 0; i < 10; i++) {
                 String palabra = conteoPalabrasSort.get(i).getKey();

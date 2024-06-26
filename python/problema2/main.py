@@ -1,4 +1,5 @@
 import random
+import time
 
 def generar_matriz(filas, columnas):
     # Rellenar la matriz con filas y columnas con número aleatorios del 1 al 10
@@ -40,6 +41,8 @@ print_matriz(matriz1)
 print("Matriz 2")
 print_matriz(matriz2)
 
+start_time = time.time()
+
 # Multiplicar las matrices
 resultado = []
 for i in range(filas_matriz1):
@@ -51,5 +54,13 @@ for i in range(filas_matriz1):
         fila.append(suma)
     resultado.append(fila)
 
+end_time = time.time()
+
+print(f"Tiempo de ejecución: {end_time - start_time} segundos")
+
 print("Resultado")
 print_matriz(resultado)
+
+archivo_resultado = open("resultado.txt", "w")
+for fila in resultado:
+    archivo_resultado.write(",".join([str(num) for num in fila]) + "\n")
